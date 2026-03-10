@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/chatbot.css">
+    <script src="js/translations.js"></script>
 </head>
 <body>
     <!-- Navigation -->
@@ -23,19 +24,23 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html">Home</a>
+                        <a class="nav-link" href="index.html" data-i18n="navHome">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="complaint.html">Submit Complaint</a>
+                        <a class="nav-link active" href="complaint.html" data-i18n="navComplaint">File Complaint</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="track.html">Track Complaint</a>
+                        <a class="nav-link" href="track.html" data-i18n="navTrack">Track Complaint</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="login.html">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn-register" href="register.html">Register</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-language"></i> <span data-i18n="navLanguage">Language</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+                            <li><a class="dropdown-item" href="#" onclick="langSwitcher.changeLanguage('en'); return false;">🇬🇧 English</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="langSwitcher.changeLanguage('hi'); return false;">🇮🇳 हिन्दी (Hindi)</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="langSwitcher.changeLanguage('mr'); return false;">🇮🇳 मराठी (Marathi)</a></li>
+                        </ul>
                     </li>
                 </ul>
             </div>
