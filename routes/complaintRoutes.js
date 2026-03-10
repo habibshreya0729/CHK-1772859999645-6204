@@ -3,6 +3,37 @@ const router = express.Router();
 
 const Complaint = require("../models/Complaint");
 
+// Generate unique Ticket ID
+async function generateTicketId() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    const datePrefix = `${year}${month}${day}`;
+    
+    // Find all tickets created today
+    const todayStart = new Date(today.setHours(0, 0, 0, 0));
+    const todayEnd = new Date(today.setHours(23, 59, 59, 999));
+    
+    const todayComplaints = await Complaint.find({
+        date: { $gte: todayStart, $lte: todayEnd }
+    }).sort({ date: -1 }).limit(1);
+    
+    let sequence = 1;
+    
+    if (todayComplaints.length > 0 && todayComplaints[0].ticketId) {
+        // Extract the sequence number from the last ticket
+        const lastTicketId = todayComplaints[0].ticketId;
+        const lastSequence = parseInt(lastTicketId.split('-')[2]);
+        if (!isNaN(lastSequence)) {
+            sequence = lastSequence + 1;
+        }
+    }
+    
+    const sequenceStr = String(sequence).padStart(4, '0');
+    return `CMP-${datePrefix}-${sequenceStr}`;
+}
+
 function classifyDepartment(text){
 
 text=text.toLowerCase();
@@ -45,29 +76,53 @@ return "Low";
 
 router.post("/create", async(req,res)=>{
 
-let department =
-classifyDepartment(req.body.description);
+try {
+    let department =
+    classifyDepartment(req.body.description);
 
-let priority =
-detectPriority(req.body.description);
+    let priority =
+    detectPriority(req.body.description);
 
-const complaint = new Complaint({
+    // Generate unique ticket ID
+    const ticketId = await generateTicketId();
 
-name:req.body.name,
+    const complaint = new Complaint({
 
-description:req.body.description,
+    ticketId: ticketId,
 
-department:department,
+    name: req.body.name,
 
-priority:priority,
+    description: req.body.description,
 
-status:"Pending"
+    department: req.body.department || department,
 
-});
+    location: req.body.location || 'Not specified',
 
-await complaint.save();
+    latitude: req.body.latitude,
 
-res.json({message:"Complaint submitted"});
+    longitude: req.body.longitude,
+
+    priority: priority,
+
+    status: "Pending"
+
+    });
+
+    await complaint.save();
+
+    res.json({
+        message: "Complaint submitted successfully",
+        ticketId: ticketId,
+        priority: priority,
+        complaint: complaint
+    });
+} catch (error) {
+    console.error("Error creating complaint:", error);
+    res.status(500).json({
+        message: "Error creating complaint",
+        error: error.message
+    });
+}
 
 });
 
@@ -112,6 +167,21 @@ router.delete("/delete/:id", async(req, res) => {
         res.json({ message: "Complaint deleted successfully" });
     } catch (error) {
         res.status(500).json({ message: "Error deleting complaint", error: error.message });
+    }
+});
+
+// Search complaint by Ticket ID
+router.get("/ticket/:ticketId", async(req, res) => {
+    try {
+        const complaint = await Complaint.findOne({ ticketId: req.params.ticketId });
+        
+        if (!complaint) {
+            return res.status(404).json({ message: "Complaint not found with this Ticket ID" });
+        }
+        
+        res.json(complaint);
+    } catch (error) {
+        res.status(500).json({ message: "Error searching complaint", error: error.message });
     }
 });
 

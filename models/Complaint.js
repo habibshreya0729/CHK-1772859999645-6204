@@ -2,22 +2,34 @@ const mongoose = require("mongoose");
 
 const ComplaintSchema = new mongoose.Schema({
 
-name:String,
-
-department:String,
-
-description:String,
-
-priority:String,
-
-status:{
-type:String,
-default:"Pending"
+ticketId: {
+    type: String,
+    unique: true,
+    required: true
 },
 
-date:{
-type:Date,
-default:Date.now
+name: String,
+
+department: String,
+
+description: String,
+
+location: String,
+
+latitude: Number,
+
+longitude: Number,
+
+priority: String,
+
+status: {
+    type: String,
+    default: "Pending"
+},
+
+date: {
+    type: Date,
+    default: Date.now
 }
 
 });

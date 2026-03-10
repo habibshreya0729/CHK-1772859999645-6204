@@ -553,6 +553,22 @@ body {
     padding: 2rem;
 }
 
+/* Map Styles */
+#map {
+    border: 2px solid var(--primary-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+}
+
+.leaflet-container {
+    font-family: inherit;
+}
+
+.form-control-sm {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+}
+
 .btn-complaint-submit {
     background: linear-gradient(135deg, var(--success-color), #47bc1f);
     color: #181616;
@@ -597,6 +613,33 @@ body {
 .dashboard-header p {
     margin: 0;
     opacity: 0.9;
+}
+
+.dashboard-header .btn {
+    font-weight: 600;
+}
+
+.dashboard-header .btn-light {
+    background: #fff;
+    border: none;
+    color: #1e293b;
+}
+
+.dashboard-header .btn-light:hover {
+    background: #f1f5f9;
+    transform: translateY(-2px);
+}
+
+.dashboard-header .btn-outline-light {
+    border-color: rgba(255, 255, 255, 0.5);
+    color: #1e293b;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.dashboard-header .btn-outline-light:hover {
+    background: #fff;
+    border-color: #fff;
+    color: #1e293b;
 }
 
 .dashboard-stat-card {
@@ -761,6 +804,23 @@ body {
     background: var(--light-bg);
 }
 
+.dashboard-table .text-primary {
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+/* Header Actions */
+.header-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.header-actions .btn-info {
+    white-space: nowrap;
+}
+
 /* ===========================
    Footer
    =========================== */
@@ -823,6 +883,55 @@ body {
 .social-links a:hover {
     background: var(--accent-color);
     transform: translateY(-3px);
+}
+
+/* ===========================
+   Track Complaint Page
+   =========================== */
+.detail-item {
+    padding: 1rem 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.detail-item:last-child {
+    border-bottom: none;
+}
+
+.detail-item strong {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.detail-item span {
+    color: var(--dark-color);
+    font-size: 1rem;
+}
+
+.ticket-id {
+    font-family: 'Courier New', monospace;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    background: var(--light-bg);
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+#resultSection {
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* ===========================

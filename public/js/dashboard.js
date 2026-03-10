@@ -1,15 +1,51 @@
 // Fetch and display complaints
-fetch("/api/complaints/all")
-    .then(res => res.json())
-    .then(data => {
-        displayComplaints(data);
-        updateStatistics(data);
-        updatePriorityCounts(data);
-        createChart(data);
-    })
-    .catch(error => {
-        console.error("Error fetching complaints:", error);
-    });
+function loadDashboard() {
+    // Show loading state
+    const table = document.getElementById("complaintTable");
+    table.innerHTML = '<tr><td colspan="8" class="text-center"><i class="fas fa-spinner fa-spin"></i> Loading complaints...</td></tr>';
+    
+    fetch("/api/complaints/all")
+        .then(res => {
+            if (!res.ok) {
+                throw new Error('Server error: ' + res.status);
+            }
+            return res.json();
+        })
+        .then(data => {
+            if (!Array.isArray(data)) {
+                throw new Error('Invalid data format');
+            }
+            displayComplaints(data);
+            updateStatistics(data);
+            updatePriorityCounts(data);
+            createChart(data);
+        })
+        .catch(error => {
+            console.error("Error fetching complaints:", error);
+            table.innerHTML = `
+                <tr>
+                    <td colspan="8" class="text-center text-danger">
+                        <i class="fas fa-exclamation-triangle"></i> 
+                        <strong>Error loading complaints:</strong> ${error.message}<br>
+                        <small>Make sure the server is running on port 5000 and MongoDB is connected.</small>
+                        <br><button class="btn btn-primary btn-sm mt-2" onclick="loadDashboard()">Retry</button>
+                    </td>
+                </tr>
+            `;
+            // Set default values
+            document.getElementById('totalComplaints').textContent = '0';
+            document.getElementById('pendingComplaints').textContent = '0';
+            document.getElementById('inProgressComplaints').textContent = '0';
+            document.getElementById('resolvedComplaints').textContent = '0';
+            document.getElementById('criticalCount').textContent = '0';
+            document.getElementById('highCount').textContent = '0';
+            document.getElementById('mediumCount').textContent = '0';
+            document.getElementById('lowCount').textContent = '0';
+        });
+}
+
+// Load dashboard on page load
+loadDashboard();
 
 // Display complaints in table
 function displayComplaints(complaints) {
@@ -19,7 +55,7 @@ function displayComplaints(complaints) {
     if (complaints.length === 0) {
         table.innerHTML = `
             <tr>
-                <td colspan="7" class="text-center">No complaints found</td>
+                <td colspan="8" class="text-center">No complaints found</td>
             </tr>
         `;
         return;
@@ -32,19 +68,20 @@ function displayComplaints(complaints) {
         table.innerHTML += `
             <tr>
                 <td>${index + 1}</td>
+                <td><strong class="text-primary">${complaint.ticketId || 'N/A'}</strong></td>
                 <td>${complaint.name || 'Anonymous'}</td>
                 <td>${complaint.department || 'General'}</td>
                 <td>${complaint.description ? (complaint.description.substring(0, 50) + '...') : 'N/A'}</td>
                 <td>${priorityBadge}</td>
                 <td>${statusBadge}</td>
                 <td>
-                    <button class="btn btn-sm btn-primary" onclick="viewComplaint('${complaint._id}')">
+                    <button class="btn btn-sm btn-primary" onclick="viewComplaint('${complaint._id}')" title="View Details">
                         <i class="fas fa-eye"></i>
                     </button>
-                    <button class="btn btn-sm btn-success" onclick="updateStatus('${complaint._id}', 'Resolved')">
-                        <i class="fas fa-check"></i>
+                    <button class="btn btn-sm btn-success" onclick="updateStatus('${complaint._id}')" title="Update Status">
+                        <i class="fas fa-edit"></i>
                     </button>
-                    <button class="btn btn-sm btn-danger" onclick="deleteComplaint('${complaint._id}')">
+                    <button class="btn btn-sm btn-danger" onclick="deleteComplaint('${complaint._id}')" title="Delete">
                         <i class="fas fa-trash"></i>
                     </button>
                 </td>
@@ -162,11 +199,59 @@ function createChart(complaints) {
 
 // Action functions
 function viewComplaint(id) {
-    alert('Viewing complaint: ' + id + '\n\nFull complaint details would be shown in a modal.');
+    fetch(`/api/complaints/all`)
+        .then(res => res.json())
+        .then(complaints => {
+            const complaint = complaints.find(c => c._id === id);
+            if (complaint) {
+                let locationInfo = '';
+                if (complaint.location) {
+                    locationInfo = `Location: ${complaint.location}\n`;
+                }
+                if (complaint.latitude && complaint.longitude) {
+                    locationInfo += `Coordinates: ${complaint.latitude}, ${complaint.longitude}\n`;
+                    locationInfo += `Map: https://www.openstreetmap.org/?mlat=${complaint.latitude}&mlon=${complaint.longitude}&zoom=15\n`;
+                }
+                
+                const details = `
+                    Complaint Details:
+                    
+                    🎫 Ticket ID: ${complaint.ticketId || 'N/A'}
+                    ID: ${complaint._id}
+                    Name: ${complaint.name}
+                    Department: ${complaint.department}
+                    Description: ${complaint.description}
+                    ${locationInfo || 'Location: Not specified\n'}Priority: ${complaint.priority}
+                    Status: ${complaint.status}
+                    Date: ${new Date(complaint.date).toLocaleString()}
+                `;
+                alert(details);
+            }
+        })
+        .catch(error => {
+            alert('Error loading complaint details');
+        });
 }
 
-function updateStatus(id, status) {
-    if (confirm('Update complaint status to ' + status + '?')) {
+function updateStatus(id, newStatus) {
+    // Create dropdown for status selection
+    const statuses = ['Pending', 'In Progress', 'Resolved', 'Rejected'];
+    const selectedStatus = newStatus || prompt(`Select status:\n\n${statuses.map((s, i) => `${i + 1}. ${s}`).join('\n')}\n\nEnter number (1-4):`);
+    
+    let status;
+    if (selectedStatus === 'Resolved' || selectedStatus === 'In Progress' || selectedStatus === 'Pending' || selectedStatus === 'Rejected') {
+        status = selectedStatus;
+    } else {
+        const statusMap = { '1': 'Pending', '2': 'In Progress', '3': 'Resolved', '4': 'Rejected' };
+        status = statusMap[selectedStatus];
+    }
+    
+    if (!status) {
+        alert('Invalid selection');
+        return;
+    }
+    
+    if (confirm(`Update complaint status to "${status}"?`)) {
         fetch(`/api/complaints/update/${id}`, {
             method: 'PUT',
             headers: {
@@ -176,8 +261,8 @@ function updateStatus(id, status) {
         })
         .then(res => res.json())
         .then(data => {
-            alert('Status updated successfully!');
-            location.reload();
+            alert('Status updated successfully to: ' + status);
+            loadDashboard(); // Reload instead of full page refresh
         })
         .catch(error => {
             alert('Error updating status: ' + error.message);
@@ -186,14 +271,14 @@ function updateStatus(id, status) {
 }
 
 function deleteComplaint(id) {
-    if (confirm('Are you sure you want to delete this complaint?')) {
+    if (confirm('Are you sure you want to delete this complaint? This action cannot be undone.')) {
         fetch(`/api/complaints/delete/${id}`, {
             method: 'DELETE'
         })
         .then(res => res.json())
         .then(data => {
             alert('Complaint deleted successfully!');
-            location.reload();
+            loadDashboard(); // Reload dashboard instead of full page refresh
         })
         .catch(error => {
             alert('Error deleting complaint: ' + error.message);
@@ -226,3 +311,47 @@ document.getElementById('filterStatus')?.addEventListener('change', function(e) 
         }
     });
 });
+
+// Search complaint by Ticket ID
+function searchByTicketId() {
+    const ticketId = prompt('Enter Ticket ID (e.g., CMP-20260310-0001):');
+    
+    if (!ticketId) {
+        return;
+    }
+    
+    fetch(`/api/complaints/ticket/${ticketId}`)
+        .then(res => {
+            if (!res.ok) {
+                throw new Error('Complaint not found');
+            }
+            return res.json();
+        })
+        .then(complaint => {
+            let locationInfo = '';
+            if (complaint.location) {
+                locationInfo = `Location: ${complaint.location}\n`;
+            }
+            if (complaint.latitude && complaint.longitude) {
+                locationInfo += `Coordinates: ${complaint.latitude}, ${complaint.longitude}\n`;
+                locationInfo += `Map: https://www.openstreetmap.org/?mlat=${complaint.latitude}&mlon=${complaint.longitude}&zoom=15\n`;
+            }
+            
+            const details = `
+                🔍 Complaint Found!
+                
+                🎫 Ticket ID: ${complaint.ticketId}
+                ID: ${complaint._id}
+                Name: ${complaint.name}
+                Department: ${complaint.department}
+                Description: ${complaint.description}
+                ${locationInfo || 'Location: Not specified\n'}Priority: ${complaint.priority}
+                Status: ${complaint.status}
+                Date: ${new Date(complaint.date).toLocaleString()}
+            `;
+            alert(details);
+        })
+        .catch(error => {
+            alert('❌ Complaint not found with Ticket ID: ' + ticketId);
+        });
+}
