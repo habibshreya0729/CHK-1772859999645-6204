@@ -172,7 +172,7 @@ const governmentSchemes = {
             benefits: ['Water supply infrastructure', 'Sewerage systems', 'Drainage facilities', 'Green spaces and parks'],
             benefitsHi: ['जल आपूर्ति बुनियादी ढांचा', 'सीवरेज सिस्टम', 'जल निकासी सुविधाएं', 'हरित स्थान और पार्क'],
             benefitsMr: ['पाणीपुरवठा पायाभूत सुविधा', 'सांडपाणी व्यवस्था', 'निचरा सुविधा', 'हरितगृह आणि उद्याने'],
-            website: 'http://amrut.gov.in/',
+            website: 'https://amrut.gov.in/',
             icon: 'fa-city'
         },
         {
@@ -193,7 +193,7 @@ const governmentSchemes = {
             benefits: ['Skill training', 'Self-employment loans', 'Street vendor support', 'Waste picker integration'],
             benefitsHi: ['कौशल प्रशिक्षण', 'स्व-रोजगार ऋण', 'फुटपाथ विक्रेता समर्थन', 'कचरा उठाने वालों का एकीकरण'],
             benefitsMr: ['कौशल्य प्रशिक्षण', 'स्वयंरोजगार कर्ज', 'रस्त्यावरील विक्रेता समर्थन', 'कचरा उचलणाऱ्यांचे एकत्रीकरण'],
-            website: 'http://nulm.gov.in/',
+            website: 'https://nulm.gov.in/',
             icon: 'fa-users'
         }
     ],
