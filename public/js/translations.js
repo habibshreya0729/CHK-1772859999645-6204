@@ -170,7 +170,13 @@ const translations = {
         schemesWater: "Water Supply",
         schemesElectricity: "Electricity",
         schemesSanitation: "Sanitation",
-        schemesRoad: "Roads & Infrastructure"
+        schemesRoad: "Roads & Infrastructure",
+        
+        // Emergency Contacts
+        emergencyTitle: "Emergency Contacts",
+        emergencyNational: "National",
+        emergencyDepartment: "Departments",
+        emergencyPolice: "Police Stations"
     },
     
     hi: {
@@ -343,7 +349,13 @@ const translations = {
         schemesWater: "जल आपूर्ति",
         schemesElectricity: "बिजली",
         schemesSanitation: "स्वच्छता",
-        schemesRoad: "सड़क और बुनियादी ढांचा"
+        schemesRoad: "सड़क और बुनियादी ढांचा",
+        
+        // Emergency Contacts
+        emergencyTitle: "आपातकालीन संपर्क",
+        emergencyNational: "राष्ट्रीय",
+        emergencyDepartment: "विभाग",
+        emergencyPolice: "पुलिस स्टेशन"
     },
     
     mr: {
@@ -516,7 +528,13 @@ const translations = {
         schemesWater: "पाणीपुरवठा",
         schemesElectricity: "वीज",
         schemesSanitation: "स्वच्छता",
-        schemesRoad: "रस्ते आणि पायाभूत सुविधा"
+        schemesRoad: "रस्ते आणि पायाभूत सुविधा",
+        
+        // Emergency Contacts
+        emergencyTitle: "आपत्कालीन संपर्क",
+        emergencyNational: "राष्ट्रीय",
+        emergencyDepartment: "विभाग",
+        emergencyPolice: "पोलीस स्टेशन"
     }
 };
 
