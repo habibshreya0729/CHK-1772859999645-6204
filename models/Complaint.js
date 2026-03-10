@@ -20,6 +20,8 @@ latitude: Number,
 
 longitude: Number,
 
+image: String,
+
 priority: String,
 
 status: {

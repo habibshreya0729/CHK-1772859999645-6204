@@ -39,7 +39,42 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .catch(error => console.log('Geocoding error:', error));
     });
+    
+    // Image preview functionality
+    document.getElementById('image').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            // Validate file size (5MB max)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('File size must be less than 5MB');
+                e.target.value = '';
+                return;
+            }
+            
+            // Validate file type
+            if (!file.type.match('image.*')) {
+                alert('Please select an image file');
+                e.target.value = '';
+                return;
+            }
+            
+            // Show preview
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('previewImg').src = e.target.result;
+                document.getElementById('imagePreview').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
 });
+
+// Clear image preview
+function clearImage() {
+    document.getElementById('image').value = '';
+    document.getElementById('imagePreview').style.display = 'none';
+    document.getElementById('previewImg').src = '';
+}
 
 // Get current location using Geolocation API
 function getCurrentLocation() {
@@ -110,6 +145,7 @@ function submitComplaint() {
     const location = document.getElementById("location").value;
     const latitude = document.getElementById("latitude").value;
     const longitude = document.getElementById("longitude").value;
+    const imageFile = document.getElementById("image").files[0];
     
     // Validate required fields
     if (!name || !department || !description) {
@@ -117,26 +153,25 @@ function submitComplaint() {
         return;
     }
     
-    // Prepare complaint data
-    const complaintData = {
-        name,
-        department,
-        description,
-        location: location || 'Not specified'
-    };
+    // Create FormData for file upload
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('department', department);
+    formData.append('description', description);
+    formData.append('location', location || 'Not specified');
     
-    // Add coordinates if available
     if (latitude && longitude) {
-        complaintData.latitude = parseFloat(latitude);
-        complaintData.longitude = parseFloat(longitude);
+        formData.append('latitude', parseFloat(latitude));
+        formData.append('longitude', parseFloat(longitude));
+    }
+    
+    if (imageFile) {
+        formData.append('image', imageFile);
     }
     
     fetch("/api/complaints/create", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(complaintData)
+        body: formData
     })
     .then(res => res.json())
     .then(data => {
@@ -150,6 +185,7 @@ function submitComplaint() {
         document.querySelector('.complaint-form').reset();
         document.getElementById('latitude').value = '';
         document.getElementById('longitude').value = '';
+        clearImage();
         
         // Remove marker from map
         if (marker) {

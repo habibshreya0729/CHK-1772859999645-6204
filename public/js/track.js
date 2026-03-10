@@ -64,6 +64,22 @@ function displayComplaintDetails(complaint) {
         `;
     }
     
+    let imageHTML = '';
+    if (complaint.image) {
+        imageHTML = `
+            <div class="detail-item">
+                <strong><i class="fas fa-camera text-success"></i> Evidence Photo:</strong>
+                <div class="mt-2">
+                    <img src="${complaint.image}" alt="Evidence" 
+                         style="max-width: 100%; max-height: 400px; border-radius: 8px; border: 2px solid #ddd; cursor: pointer;"
+                         onclick="window.open('${complaint.image}', '_blank')">
+                    <br>
+                    <small class="text-muted"><i class="fas fa-info-circle"></i> Click image to view full size</small>
+                </div>
+            </div>
+        `;
+    }
+    
     const detailsHTML = `
         <div class="card-body">
             <h4 class="text-center mb-4">
@@ -91,6 +107,8 @@ function displayComplaintDetails(complaint) {
             </div>
             
             ${locationHTML}
+            
+            ${imageHTML}
             
             <div class="detail-item">
                 <strong><i class="fas fa-exclamation-circle"></i> Priority:</strong>

@@ -1,4 +1,6 @@
 // Fetch and display complaints
+let complaintChart = null; // Store chart instance globally
+
 function loadDashboard() {
     // Show loading state
     const table = document.getElementById("complaintTable");
@@ -140,6 +142,11 @@ function updatePriorityCounts(complaints) {
 
 // Create chart
 function createChart(complaints) {
+    // Destroy existing chart if it exists
+    if (complaintChart) {
+        complaintChart.destroy();
+    }
+    
     let deptCount = {};
     
     complaints.forEach(c => {
@@ -152,7 +159,7 @@ function createChart(complaints) {
 
     const ctx = document.getElementById("complaintChart");
     
-    new Chart(ctx, {
+    complaintChart = new Chart(ctx, {
         type: "bar",
         data: {
             labels: Object.keys(deptCount),
@@ -213,6 +220,11 @@ function viewComplaint(id) {
                     locationInfo += `Map: https://www.openstreetmap.org/?mlat=${complaint.latitude}&mlon=${complaint.longitude}&zoom=15\n`;
                 }
                 
+                let imageInfo = '';
+                if (complaint.image) {
+                    imageInfo = `\n📷 Evidence Photo: Available (View in modal)\n`;
+                }
+                
                 const details = `
                     Complaint Details:
                     
@@ -223,9 +235,16 @@ function viewComplaint(id) {
                     Description: ${complaint.description}
                     ${locationInfo || 'Location: Not specified\n'}Priority: ${complaint.priority}
                     Status: ${complaint.status}
-                    Date: ${new Date(complaint.date).toLocaleString()}
+                    Date: ${new Date(complaint.date).toLocaleString()}${imageInfo}
                 `;
                 alert(details);
+                
+                // If image exists, show it in a modal or new tab
+                if (complaint.image) {
+                    if (confirm('Would you like to view the evidence photo?')) {
+                        window.open(complaint.image, '_blank');
+                    }
+                }
             }
         })
         .catch(error => {
@@ -337,6 +356,11 @@ function searchByTicketId() {
                 locationInfo += `Map: https://www.openstreetmap.org/?mlat=${complaint.latitude}&mlon=${complaint.longitude}&zoom=15\n`;
             }
             
+            let imageInfo = '';
+            if (complaint.image) {
+                imageInfo = `\n📷 Evidence Photo: Available\n`;
+            }
+            
             const details = `
                 🔍 Complaint Found!
                 
@@ -347,9 +371,16 @@ function searchByTicketId() {
                 Description: ${complaint.description}
                 ${locationInfo || 'Location: Not specified\n'}Priority: ${complaint.priority}
                 Status: ${complaint.status}
-                Date: ${new Date(complaint.date).toLocaleString()}
+                Date: ${new Date(complaint.date).toLocaleString()}${imageInfo}
             `;
             alert(details);
+            
+            // If image exists, show it
+            if (complaint.image) {
+                if (confirm('Would you like to view the evidence photo?')) {
+                    window.open(complaint.image, '_blank');
+                }
+            }
         })
         .catch(error => {
             alert('❌ Complaint not found with Ticket ID: ' + ticketId);
