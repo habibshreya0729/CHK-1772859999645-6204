@@ -80,6 +80,9 @@ function displayComplaints(complaints) {
                     <button class="btn btn-sm btn-primary" onclick="viewComplaint('${complaint._id}')" title="View Details">
                         <i class="fas fa-eye"></i>
                     </button>
+                    <button class="btn btn-sm btn-warning" onclick="downloadComplaintPDF('${complaint._id}')" title="Download PDF">
+                        <i class="fas fa-file-pdf"></i>
+                    </button>
                     <button class="btn btn-sm btn-success" onclick="updateStatus('${complaint._id}')" title="Update Status">
                         <i class="fas fa-edit"></i>
                     </button>
@@ -385,4 +388,68 @@ function searchByTicketId() {
         .catch(error => {
             alert('❌ Complaint not found with Ticket ID: ' + ticketId);
         });
+}
+
+// Download PDF for a single complaint
+function downloadComplaintPDF(id) {
+    if (confirm('Download PDF report for this complaint?')) {
+        // Show loading indicator
+        const btn = event.target.closest('button');
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        btn.disabled = true;
+        
+        // Create a temporary link and trigger download
+        const link = document.createElement('a');
+        link.href = `/api/pdf/complaint/${id}`;
+        link.download = `complaint-${id}.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        // Reset button after delay
+        setTimeout(() => {
+            btn.innerHTML = originalHTML;
+            btn.disabled = false;
+        }, 2000);
+    }
+}
+
+// Download PDF summary of all complaints
+function downloadAllPDF() {
+    if (confirm('Generate and download PDF summary of all complaints?')) {
+        // Show loading message
+        const originalText = event.target.innerHTML;
+        event.target.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+        event.target.disabled = true;
+        
+        // Create a temporary link and trigger download
+        const link = document.createElement('a');
+        link.href = '/api/pdf/summary';
+        link.download = `complaints-summary-${Date.now()}.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        // Reset button after delay
+        setTimeout(() => {
+            event.target.innerHTML = originalText;
+            event.target.disabled = false;
+        }, 3000);
+    }
+}
+
+// Download filtered PDF (can be used for status/department filters)
+function downloadFilteredPDF(status = '', department = '', priority = '') {
+    const params = new URLSearchParams();
+    if (status) params.append('status', status);
+    if (department) params.append('department', department);
+    if (priority) params.append('priority', priority);
+    
+    const link = document.createElement('a');
+    link.href = `/api/pdf/filtered?${params.toString()}`;
+    link.download = `complaints-filtered-${Date.now()}.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }

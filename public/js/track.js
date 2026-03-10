@@ -124,6 +124,12 @@ function displayComplaintDetails(complaint) {
                 <strong><i class="fas fa-calendar-alt text-warning"></i> Submitted Date:</strong>
                 <span>${new Date(complaint.date).toLocaleString()}</span>
             </div>
+            
+            <div class="text-center mt-4">
+                <button class="btn btn-success btn-lg" onclick="downloadComplaintPDF('${complaint._id}')">
+                    <i class="fas fa-file-pdf"></i> Download PDF Report
+                </button>
+            </div>
         </div>
     `;
     
@@ -162,3 +168,26 @@ document.getElementById('ticketId')?.addEventListener('keypress', function(e) {
         trackComplaint();
     }
 });
+
+// Download PDF for the complaint
+function downloadComplaintPDF(id) {
+    // Show loading indicator
+    const btn = event.target;
+    const originalHTML = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating PDF...';
+    btn.disabled = true;
+    
+    // Create a temporary link and trigger download
+    const link = document.createElement('a');
+    link.href = `/api/pdf/complaint/${id}`;
+    link.download = `complaint-${id}.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    // Reset button after delay
+    setTimeout(() => {
+        btn.innerHTML = originalHTML;
+        btn.disabled = false;
+    }, 2000);
+}
