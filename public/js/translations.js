@@ -8,6 +8,7 @@ const translations = {
         navTrack: "Track Complaint",
         navAdmin: "Admin",
         navLanguage: "Language",
+        navSchemes: "Schemes",
         
         // Home Page
         homeTitle: "Urban Governance Portal",
@@ -157,7 +158,19 @@ const translations = {
         locationError: "Unable to get your location. Please enter manually.",
         imageError: "Invalid image file. Please upload JPEG, PNG, or JPG only.",
         imageSizeError: "File size exceeds 5MB limit.",
-        selectStatus: "Select status"
+        selectStatus: "Select status",
+        
+        // Schemes Page
+        schemesTitle: "Government Schemes",
+        schemesSubtitle: "Discover government-recognized schemes for Water, Electricity, Sanitation, and Roads",
+        schemesInfo: "All schemes listed below are officially recognized by the Government of India",
+        schemesNotice: "Official Government Schemes",
+        schemesNoticeText: "These schemes are launched by various ministries of the Government of India. Click on \"Visit Website\" to learn more and apply.",
+        schemesAll: "All Schemes",
+        schemesWater: "Water Supply",
+        schemesElectricity: "Electricity",
+        schemesSanitation: "Sanitation",
+        schemesRoad: "Roads & Infrastructure"
     },
     
     hi: {
@@ -168,6 +181,7 @@ const translations = {
         navTrack: "शिकायत ट्रैक करें",
         navAdmin: "व्यवस्थापक",
         navLanguage: "भाषा",
+        navSchemes: "योजनाएं",
         
         // Home Page
         homeTitle: "शहरी शासन पोर्टल",
@@ -317,7 +331,19 @@ const translations = {
         locationError: "आपका स्थान प्राप्त करने में असमर्थ। कृपया मैन्युअल रूप से दर्ज करें।",
         imageError: "अमान्य छवि फ़ाइल। कृपया केवल JPEG, PNG, या JPG अपलोड करें।",
         imageSizeError: "फ़ाइल का आकार 5MB की सीमा से अधिक है।",
-        selectStatus: "स्थिति चुनें"
+        selectStatus: "स्थिति चुनें",
+        
+        // Schemes Page
+        schemesTitle: "सरकारी योजनाएं",
+        schemesSubtitle: "जल, बिजली, स्वच्छता और सड़कों के लिए सरकार द्वारा मान्यता प्राप्त योजनाएं खोजें",
+        schemesInfo: "नीचे सूचीबद्ध सभी योजनाएं भारत सरकार द्वारा आधिकारिक रूप से मान्यता प्राप्त हैं",
+        schemesNotice: "आधिकारिक सरकारी योजनाएं",
+        schemesNoticeText: "ये योजनाएं भारत सरकार के विभिन्न मंत्रालयों द्वारा शुरू की गई हैं। अधिक जानने और आवेदन करने के लिए 'वेबसाइट देखें' पर क्लिक करें।",
+        schemesAll: "सभी योजनाएं",
+        schemesWater: "जल आपूर्ति",
+        schemesElectricity: "बिजली",
+        schemesSanitation: "स्वच्छता",
+        schemesRoad: "सड़क और बुनियादी ढांचा"
     },
     
     mr: {
@@ -328,6 +354,7 @@ const translations = {
         navTrack: "तक्रार ट्रॅक करा",
         navAdmin: "प्रशासक",
         navLanguage: "भाषा",
+        navSchemes: "योजना",
         
         // Home Page
         homeTitle: "शहरी शासन पोर्टल",
@@ -477,7 +504,19 @@ const translations = {
         locationError: "तुमचे स्थान मिळवू शकलो नाही. कृपया व्यक्तिचलितपणे प्रविष्ट करा.",
         imageError: "अवैध प्रतिमा फाइल. कृपया फक्त JPEG, PNG किंवा JPG अपलोड करा.",
         imageSizeError: "फाइल आकार 5MB मर्यादा ओलांडतो.",
-        selectStatus: "स्थिती निवडा"
+        selectStatus: "स्थिती निवडा",
+        
+        // Schemes Page
+        schemesTitle: "सरकारी योजना",
+        schemesSubtitle: "पाणी, वीज, स्वच्छता आणि रस्त्यांसाठी सरकार-मान्यताप्राप्त योजना शोधा",
+        schemesInfo: "खाली सूचीबद्ध केलेल्या सर्व योजना भारत सरकारद्वारे अधिकृतपणे मान्यताप्राप्त आहेत",
+        schemesNotice: "अधिकृत सरकारी योजना",
+        schemesNoticeText: "या योजना भारत सरकारच्या विविध मंत्रालयांद्वारे सुरू केल्या आहेत. अधिक जाणून घेण्यासाठी आणि अर्ज करण्यासाठी 'वेबसाइट भेट द्या' वर क्लिक करा.",
+        schemesAll: "सर्व योजना",
+        schemesWater: "पाणीपुरवठा",
+        schemesElectricity: "वीज",
+        schemesSanitation: "स्वच्छता",
+        schemesRoad: "रस्ते आणि पायाभूत सुविधा"
     }
 };
 
