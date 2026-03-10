@@ -232,12 +232,15 @@
 
     <!-- Emergency Contacts Widget -->
     <div id="emergencyWidget" class="emergency-widget collapsed">
-        <div class="emergency-header" onclick="toggleEmergencyWidget()">
-            <div class="emergency-header-content">
+        <div class="emergency-header">
+            <div class="emergency-header-content" onclick="toggleEmergencyWidget()">
                 <i class="fas fa-phone-volume"></i>
                 <span data-i18n="emergencyTitle">Emergency Contacts</span>
             </div>
-            <i class="fas fa-chevron-up emergency-toggle-icon"></i>
+            <div class="emergency-header-actions">
+                <i class="fas fa-chevron-up emergency-toggle-icon" onclick="toggleEmergencyWidget()"></i>
+                <i class="fas fa-times emergency-close-icon" onclick="closeEmergencyWidget()" title="Close"></i>
+            </div>
         </div>
         
         <div class="emergency-body">

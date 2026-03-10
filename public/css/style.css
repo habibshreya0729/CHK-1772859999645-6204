@@ -1060,7 +1060,7 @@ body {
    =========================== */
 .emergency-widget {
     position: fixed;
-    bottom: 80px;
+    bottom: 100px;
     right: 20px;
     width: 380px;
     max-width: calc(100vw - 40px);
@@ -1070,6 +1070,10 @@ body {
     z-index: 999;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     overflow: hidden;
+}
+
+.emergency-widget.hidden {
+    display: none;
 }
 
 .emergency-widget.collapsed {
@@ -1099,6 +1103,14 @@ body {
     gap: 12px;
     font-weight: 600;
     font-size: 16px;
+    cursor: pointer;
+    flex: 1;
+}
+
+.emergency-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .emergency-header-content i {
@@ -1114,10 +1126,30 @@ body {
 .emergency-toggle-icon {
     transition: transform 0.3s ease;
     font-size: 18px;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+}
+
+.emergency-toggle-icon:hover {
+    background: rgba(255, 255, 255, 0.2);
 }
 
 .emergency-widget.collapsed .emergency-toggle-icon {
     transform: rotate(180deg);
+}
+
+.emergency-close-icon {
+    font-size: 20px;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.emergency-close-icon:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
 }
 
 .emergency-body {
@@ -1385,7 +1417,7 @@ body {
 @media (max-width: 768px) {
     .emergency-widget {
         right: 10px;
-        bottom: 70px;
+        bottom: 90px;
         width: calc(100vw - 20px);
     }
     
@@ -1396,5 +1428,9 @@ body {
     .emergency-tab {
         font-size: 11px;
         padding: 8px 6px;
+    }
+    
+    .emergency-close-icon {
+        font-size: 18px;
     }
 }

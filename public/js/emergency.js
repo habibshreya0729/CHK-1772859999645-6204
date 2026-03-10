@@ -445,6 +445,13 @@ function toggleEmergencyWidget() {
     }
 }
 
+// Close emergency widget completely
+function closeEmergencyWidget() {
+    const widget = document.getElementById('emergencyWidget');
+    widget.classList.add('hidden');
+    localStorage.setItem('emergencyWidgetState', 'hidden');
+}
+
 // Load emergency contacts based on active tab
 function loadEmergencyContacts(type = 'national') {
     const container = document.getElementById('emergencyContent');
@@ -573,7 +580,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const widget = document.getElementById('emergencyWidget');
     
     if (widget) {
-        if (savedState === 'expanded') {
+        if (savedState === 'hidden') {
+            widget.classList.add('hidden');
+        } else if (savedState === 'expanded') {
             widget.classList.remove('collapsed');
             widget.classList.add('expanded');
         } else {
