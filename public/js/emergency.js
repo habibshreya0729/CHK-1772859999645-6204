@@ -573,9 +573,154 @@ function switchEmergencyTab(type) {
     loadEmergencyContacts(type);
 }
 
+// ===========================
+// Horizontal Section Functions
+// ===========================
+
+// Switch emergency tab for horizontal section
+function switchEmergencyTabH(type) {
+    // Update active tab
+    const tabs = document.querySelectorAll('.emergency-h-tab');
+    tabs.forEach(tab => tab.classList.remove('active'));
+    const activeButton = Array.from(tabs).find(tab => 
+        tab.getAttribute('onclick').includes(`'${type}'`)
+    );
+    if (activeButton) {
+        activeButton.classList.add('active');
+    }
+    
+    // Load content
+    loadEmergencyContactsHorizontal(type);
+}
+
+// Load emergency contacts in horizontal layout
+function loadEmergencyContactsHorizontal(type = 'national') {
+    const container = document.getElementById('emergencyHorizontalContent');
+    const currentLang = localStorage.getItem('selectedLanguage') || 'en';
+    
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    if (type === 'national') {
+        // Display national emergency numbers in grid
+        const grid = document.createElement('div');
+        grid.className = 'emergency-h-grid';
+        
+        emergencyData.nationalEmergency.forEach(item => {
+            const name = currentLang === 'hi' ? item.nameHi : currentLang === 'mr' ? item.nameMr : item.name;
+            const desc = currentLang === 'hi' ? item.descriptionHi : currentLang === 'mr' ? item.descriptionMr : item.description;
+            
+            grid.innerHTML += `
+                <div class="emergency-h-card">
+                    <div class="emergency-h-card-header">
+                        <div class="emergency-h-icon" style="background-color: ${item.color}">
+                            <i class="fas ${item.icon}"></i>
+                        </div>
+                        <div class="emergency-h-card-title">
+                            <h4>${name}</h4>
+                            <p>${desc}</p>
+                        </div>
+                    </div>
+                    <a href="tel:${item.number}" class="emergency-h-number">
+                        <i class="fas fa-phone"></i> ${item.number}
+                    </a>
+                </div>
+            `;
+        });
+        
+        container.appendChild(grid);
+    } else if (type === 'department') {
+        // Display department-wise emergency numbers
+        const departments = ['water', 'electricity', 'sanitation', 'road'];
+        departments.forEach(dept => {
+            const deptName = getDepartmentName(dept, currentLang);
+            const items = emergencyData.departmentEmergency[dept];
+            
+            const section = document.createElement('div');
+            section.className = 'emergency-dept-section';
+            
+            section.innerHTML = `
+                <div class="emergency-dept-title">
+                    <i class="fas ${getDepartmentIcon(dept)}"></i> ${deptName}
+                </div>
+                <div class="emergency-dept-grid" id="dept-${dept}">
+                </div>
+            `;
+            
+            container.appendChild(section);
+            
+            const deptGrid = document.getElementById(`dept-${dept}`);
+            items.forEach(item => {
+                const name = currentLang === 'hi' ? item.nameHi : currentLang === 'mr' ? item.nameMr : item.name;
+                const desc = currentLang === 'hi' ? item.descriptionHi : currentLang === 'mr' ? item.descriptionMr : item.description;
+                
+                const card = document.createElement('div');
+                card.className = 'emergency-dept-card';
+                card.innerHTML = `
+                    <div class="emergency-dept-card-header">
+                        <strong>${name}</strong>
+                        <span class="emergency-region-badge">${item.region}</span>
+                    </div>
+                    <p class="emergency-dept-card-desc">${desc}</p>
+                    <a href="tel:${item.number}" class="emergency-dept-number">
+                        <i class="fas fa-phone"></i> ${item.number}
+                    </a>
+                `;
+                deptGrid.appendChild(card);
+            });
+        });
+    } else if (type === 'police') {
+        // Display police stations by region
+        const regions = ['Delhi', 'Mumbai', 'Bangalore', 'Chennai', 'Pune', 'Hyderabad'];
+        regions.forEach(region => {
+            const stations = emergencyData.policeStations.filter(ps => ps.region === region);
+            if (stations.length > 0) {
+                const regionName = currentLang === 'hi' ? stations[0].regionHi : currentLang === 'mr' ? stations[0].regionMr : region;
+                
+                const section = document.createElement('div');
+                section.className = 'emergency-dept-section';
+                
+                section.innerHTML = `
+                    <div class="emergency-dept-title">
+                        <i class="fas fa-map-marker-alt"></i> ${regionName}
+                    </div>
+                    <div class="emergency-police-grid" id="region-${region}">
+                    </div>
+                `;
+                
+                container.appendChild(section);
+                
+                const policeGrid = document.getElementById(`region-${region}`);
+                stations.forEach(station => {
+                    const name = currentLang === 'hi' ? station.nameHi : currentLang === 'mr' ? station.nameMr : station.name;
+                    const address = currentLang === 'hi' ? station.addressHi : currentLang === 'mr' ? station.addressMr : station.address;
+                    
+                    const card = document.createElement('div');
+                    card.className = 'emergency-police-card';
+                    card.innerHTML = `
+                        <div class="emergency-police-header">
+                            <i class="fas fa-building"></i>
+                            <strong>${name}</strong>
+                        </div>
+                        <p class="emergency-police-address">
+                            <i class="fas fa-map-marker-alt"></i> ${address}
+                        </p>
+                        <a href="tel:${station.phone}" class="emergency-police-number">
+                            <i class="fas fa-phone"></i> ${station.phone}
+                        </a>
+                    `;
+                    policeGrid.appendChild(card);
+                });
+            }
+        });
+    }
+}
+
+
 // Initialize emergency widget on page load
 document.addEventListener('DOMContentLoaded', function() {
-    // Check saved state
+    // Check saved state for floating widget
     const savedState = localStorage.getItem('emergencyWidgetState');
     const widget = document.getElementById('emergencyWidget');
     
@@ -589,7 +734,13 @@ document.addEventListener('DOMContentLoaded', function() {
             widget.classList.add('collapsed');
         }
         
-        // Load default content
+        // Load default content for widget
         loadEmergencyContacts('national');
+    }
+    
+    // Initialize horizontal section if it exists
+    const horizontalSection = document.getElementById('emergencyHorizontalContent');
+    if (horizontalSection) {
+        loadEmergencyContactsHorizontal('national');
     }
 });
