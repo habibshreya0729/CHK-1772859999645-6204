@@ -1586,7 +1586,7 @@ body {
 }
 
 .emergency-dept-title {
-    background: linear-gradient(135deg, #4649de 0%, #6366f1 100%);
+    background: linear-gradient(135deg, #47bc1f  0%, #e68c46 100%);
     color: #ffffff;
     padding: 14px 24px;
     border-radius: 12px;
@@ -1629,7 +1629,7 @@ body {
 
 .emergency-dept-card-header strong {
     font-size: 15px;
-    color: #1e293b;
+    color: #141312  ;
     font-weight: 700;
     flex: 1;
 }
@@ -1637,7 +1637,7 @@ body {
 .emergency-region-badge {
     font-size: 11px;
     background: #e0e7ff;
-    color: #4338ca;
+    color: #0a0b0a ;
     padding: 4px 10px;
     border-radius: 20px;
     font-weight: 600;
@@ -1646,7 +1646,7 @@ body {
 
 .emergency-dept-card-desc {
     font-size: 13px;
-    color: #64748b;
+    color: #151312;
     margin: 0.75rem 0;
     line-height: 1.5;
 }
@@ -1687,7 +1687,7 @@ body {
 }
 
 .emergency-police-card:hover {
-    border-color: #3b82f6;
+    border-color: #e68c46;
     box-shadow: 0 6px 20px rgba(59, 130, 246, 0.15);
     transform: translateY(-4px);
 }
@@ -1702,19 +1702,19 @@ body {
 }
 
 .emergency-police-header i {
-    color: #3b82f6;
+    color: #171615;
     font-size: 24px;
 }
 
 .emergency-police-header strong {
     font-size: 16px;
-    color: #1e293b;
+    color: #141211;
     font-weight: 700;
 }
 
 .emergency-police-address {
     font-size: 13px;
-    color: #64748b;
+    color: #18191a;
     margin: 1rem 0;
     display: flex;
     align-items: start;
@@ -1723,7 +1723,7 @@ body {
 }
 
 .emergency-police-address i {
-    color: #94a3b8;
+    color: #151516;
     margin-top: 3px;
     flex-shrink: 0;
 }
@@ -1732,7 +1732,7 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    background: linear-gradient(135deg, #1b1c1a 0%, #121311 100%);
     color: #ffffff;
     padding: 10px 20px;
     border-radius: 50px;
